@@ -1,3 +1,0 @@
-[submodule "contrib/PySEAL"]
-	path = contrib/PySEAL
-	url = git@github.com:Lab41/PySEAL.git

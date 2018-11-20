@@ -10,12 +10,90 @@
 #include <limits>
 #include <complex>
 #include <iterator>
-
+#include <vector>
 #include "seal/seal.h"
 
 using namespace std;
 using namespace seal;
 
+const uint coeff_type_size = sizeof(Ciphertext::ct_coeff_type)*8;
+
+vector<bool> toVec(Ciphertext encrypted) {
+    uint bits = encrypted.size()*coeff_type_size;
+    vector<bool> enc(bits, 0);
+    for (int i = 0; i < encrypted.size(); ++i) {
+        Ciphertext::ct_coeff_type v = encrypted[i];
+        Ciphertext::ct_coeff_type mask = 1;
+        for (int j = 0; j < coeff_type_size; ++j) {
+            uint offset = i*coeff_type_size+j;
+            enc[offset] = mask & v;
+            mask <<= 1;
+        }
+    }
+
+    return enc;
+}
+
+#define TO_NUM(x) (x ? 1 : 0)
+
+bool leftGreater(bool x, bool y) {
+    int X = TO_NUM(x);
+    int Y = TO_NUM(y);
+    return (X * Y + X) % 2 == 1;
+}
+
+bool equals(bool x, bool y) {
+    int X = TO_NUM(x);
+    int Y = TO_NUM(y);
+    return (X + Y + 1) % 2 == 1;
+}
+
+bool recurseEq(vector<bool> enc1, vector<bool> enc2, int i, int j);
+// t_i,j
+bool recurseGt(vector<bool> enc1, vector<bool> enc2, int i, int j) {
+    if (j == 1) {
+        return equals(enc1[i], enc2[i]);
+    }
+
+    int l = ceil(j / 2.0);
+    bool p1 = recurseGt(enc1, enc2, i + l , j - l);
+    bool p2 = recurseEq(enc1, enc2, i + l , j - l);
+    bool p3 = recurseGt(enc1, enc2, i, l);
+
+    return (TO_NUM(p1) + TO_NUM(p2 && p3)) % 2 == 1;
+}
+
+// z_i,j
+bool recurseEq(vector<bool> enc1, vector<bool> enc2, int i, int j) {
+    if (j == 1) {
+        return equals(enc1[i], enc2[i]);
+    }
+
+    int l = ceil(j / 2.0);
+    bool p1 = recurseGt(enc1, enc2, i + l , j - l);
+    bool p3 = recurseGt(enc1, enc2, i, l);
+
+    return TO_NUM(p1 && p3) % 2 == 1;
+}
+
+int compare(Ciphertext encrypted1, Ciphertext encrypted2) {
+    vector<bool> enc1 = toVec(encrypted1);
+    vector<bool> enc2 = toVec(encrypted2);
+
+    for (auto v: enc1) {
+        cout << v;
+    }
+    cout << "\n";
+    for (auto v: enc1) {
+        cout << v;
+    }
+    cout << "\n";
+
+    // TODO: Recurse
+    bool equals = recurseEq(enc1, enc2, 0, enc1.size());
+    cout << "Equals is: " << equals << "\n";
+    return 0 ;
+}
 
 int main()
 {
@@ -40,7 +118,7 @@ int main()
     cout << "Encoded " << value1 << " as polynomial " << plain1.to_string() 
         << " (plain1)" << endl;
 
-    int value2 = 1;
+    int value2 = 5;
     Plaintext plain2 = encoder.encode(value2);
     cout << "Encoded " << value2 << " as polynomial " << plain2.to_string() 
         << " (plain2)" << endl;
@@ -57,9 +135,12 @@ int main()
     encryptor.encrypt(plain2, encrypted2);
     cout << "Done (encrypted2)" << endl;
 
-    for (int i = 0; i <1; ++i) {
-        evaluator.multiply_inplace(encrypted1, encrypted2);
-    }
+    cout << "Converting to bitarray\n";
+    compare(encrypted1, encrypted2);
+
+    // for (int i = 0; i <1; ++i) {
+    //     evaluator.multiply_inplace(encrypted1, encrypted2);
+    // }
 
     for (size_t i = 0; i < encrypted1.size(); i++) {
         cout << " " << encrypted1[i] << " ";
@@ -71,8 +152,6 @@ int main()
     }
 
     cout << "\n";
-    
-
 
     /* Decrypt part */
     Plaintext plain_result;

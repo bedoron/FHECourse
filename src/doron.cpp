@@ -40,7 +40,7 @@ int main()
     cout << "Encoded " << value1 << " as polynomial " << plain1.to_string() 
         << " (plain1)" << endl;
 
-    int value2 = 5;
+    int value2 = 1;
     Plaintext plain2 = encoder.encode(value2);
     cout << "Encoded " << value2 << " as polynomial " << plain2.to_string() 
         << " (plain2)" << endl;
@@ -57,9 +57,24 @@ int main()
     encryptor.encrypt(plain2, encrypted2);
     cout << "Done (encrypted2)" << endl;
 
+    for (int i = 0; i <1; ++i) {
+        evaluator.multiply_inplace(encrypted1, encrypted2);
+    }
+
+    for (size_t i = 0; i < encrypted1.size(); i++) {
+        cout << " " << encrypted1[i] << " ";
+    }
+
+    cout << "\n";
+    for (size_t i = 0; i < encrypted2.size(); i++) {
+        cout << " " << encrypted2[i] << " ";
+    }
+
+    cout << "\n";
+    
 
 
-    // Decrypt part
+    /* Decrypt part */
     Plaintext plain_result;
     cout << "Decrypting result: ";
     decryptor.decrypt(encrypted1, plain_result);

@@ -70,10 +70,10 @@ bool recurseEq(vector<bool> enc1, vector<bool> enc2, int i, int j) {
     }
 
     int l = ceil(j / 2.0);
-    bool p1 = recurseGt(enc1, enc2, i + l , j - l);
-    bool p3 = recurseGt(enc1, enc2, i, l);
+    bool p1 = recurseEq(enc1, enc2, i + l , j - l);
+    bool p3 = recurseEq(enc1, enc2, i, l);
 
-    return TO_NUM(p1 && p3) % 2 == 1;
+    return p1 && p3;
 }
 
 int compare(Ciphertext encrypted1, Ciphertext encrypted2) {
@@ -84,7 +84,7 @@ int compare(Ciphertext encrypted1, Ciphertext encrypted2) {
         cout << v;
     }
     cout << "\n";
-    for (auto v: enc1) {
+    for (auto v: enc2) {
         cout << v;
     }
     cout << "\n";
@@ -113,6 +113,11 @@ int main()
 
     Decryptor decryptor(context, secret_key);
 
+    int value_one = 1;
+    Plaintext plain_one = encoder.encode(value_one);
+    cout << "Encoded " << value_one << " as polynomial " << plain_one.to_string() 
+        << " (plain_one)" << endl;
+
     int value1 = 5;
     Plaintext plain1 = encoder.encode(value1);
     cout << "Encoded " << value1 << " as polynomial " << plain1.to_string() 
@@ -126,7 +131,7 @@ int main()
     /*
     Encrypting the encoded values is easy.
     */
-    Ciphertext encrypted1, encrypted2;
+    Ciphertext encrypted1, encrypted2, encrypted_one;
     cout << "Encrypting plain1: ";
     encryptor.encrypt(plain1, encrypted1);
     cout << "Done (encrypted1)" << endl;
@@ -134,6 +139,15 @@ int main()
     cout << "Encrypting plain2: ";
     encryptor.encrypt(plain2, encrypted2);
     cout << "Done (encrypted2)" << endl;
+
+    cout << "Encrypting plain_one: ";
+    encryptor.encrypt(plain_one, encrypted_one);
+    cout << "Done (encrypted_one)" << endl;
+
+    // evaluator.multiply_inplace(encrypted1, encrypted_one);
+
+    // evaluator.add_inplace(encrypted1, encrypted_one);
+    // evaluator.sub_inplace(encrypted1, encrypted_one);
 
     cout << "Converting to bitarray\n";
     compare(encrypted1, encrypted2);

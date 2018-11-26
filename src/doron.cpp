@@ -18,10 +18,48 @@ using namespace seal;
 
 const uint coeff_type_size = sizeof(Ciphertext::ct_coeff_type)*8;
 
+void handleSmallPoly(const std::uint64_t *poly, std::size_t coeff_count, const SmallModulus &modulus, vector<bool> &enc) {
+                const uint64_t modulus_value = modulus.value();
+    for (; coeff_count--; poly++)
+    {
+        std::int64_t non_zero = (*poly != 0);
+        auto v = (modulus_value - *poly) & static_cast<std::uint64_t>(-non_zero);
+        
+        Ciphertext::ct_coeff_type mask = 1;
+        for (int j = 0; j < coeff_type_size; ++j) {
+            bool val = mask & v;
+            enc.push_back(val);
+            mask <<= 1;
+        }
+
+    }
+}
+
+vector<bool> toVec2(const std::shared_ptr<SEALContext> &context, const Ciphertext &encrypted) {
+    const auto &context_data = context->context_data(encrypted.parms_id());;
+    const auto &parms = context_data->parms();
+    auto &coeff_modulus = parms.coeff_modulus();
+    size_t coeff_count = parms.poly_modulus_degree();
+    size_t coeff_mod_count = coeff_modulus.size();
+    size_t encrypted_size = encrypted.size();
+
+    vector<bool> enc;
+    for (size_t j = 0; j < encrypted_size; j++)
+    {
+        for (size_t i = 0; i < coeff_mod_count; i++)
+        {
+            handleSmallPoly(encrypted.data(j) + (i * coeff_count),coeff_count,coeff_modulus[i], enc);
+        }
+    }
+
+    return enc;
+}
+
+
 vector<bool> toVec(Ciphertext encrypted) {
-    uint bits = encrypted.size()*coeff_type_size;
+    uint bits = encrypted.poly_modulus_degree()*coeff_type_size;
     vector<bool> enc(bits, 0);
-    for (int i = 0; i < encrypted.size(); ++i) {
+    for (int i = 0; i < encrypted.poly_modulus_degree(); ++i) {
         Ciphertext::ct_coeff_type v = encrypted[i];
         Ciphertext::ct_coeff_type mask = 1;
         for (int j = 0; j < coeff_type_size; ++j) {
@@ -76,19 +114,16 @@ bool recurseEq(vector<bool> enc1, vector<bool> enc2, int i, int j) {
     return p1 && p3;
 }
 
-int compare(Ciphertext encrypted1, Ciphertext encrypted2) {
-    vector<bool> enc1 = toVec(encrypted1);
-    vector<bool> enc2 = toVec(encrypted2);
+int compare2(Evaluator& evaluator, Ciphertext& encrypted1, Ciphertext& encrypted2) {
+    Ciphertext subtraction;
+    evaluator.sub(encrypted1, encrypted2, subtraction);
 
-    for (auto v: enc1) {
-        cout << v;
-    }
-    cout << "\n";
-    for (auto v: enc2) {
-        cout << v;
-    }
-    cout << "\n";
+    
 
+    return 0;
+}
+
+int compare(vector<bool> enc1, vector<bool> enc2) {
     // TODO: Recurse
     bool equals = recurseEq(enc1, enc2, 0, enc1.size());
     cout << "Equals is: " << equals << "\n";
@@ -98,7 +133,7 @@ int compare(Ciphertext encrypted1, Ciphertext encrypted2) {
 int main()
 {
     EncryptionParameters parms(scheme_type::BFV);
-    parms.set_poly_modulus_degree(2048);
+    parms.set_poly_modulus_degree(1 << 8);
     parms.set_coeff_modulus(coeff_modulus_128(2048));
     parms.set_plain_modulus(1 << 8);
     auto context = SEALContext::Create(parms);
@@ -118,7 +153,7 @@ int main()
     cout << "Encoded " << value_one << " as polynomial " << plain_one.to_string() 
         << " (plain_one)" << endl;
 
-    int value1 = 5;
+    int value1 = 0;
     Plaintext plain1 = encoder.encode(value1);
     cout << "Encoded " << value1 << " as polynomial " << plain1.to_string() 
         << " (plain1)" << endl;
@@ -150,20 +185,27 @@ int main()
     // evaluator.sub_inplace(encrypted1, encrypted_one);
 
     cout << "Converting to bitarray\n";
-    compare(encrypted1, encrypted2);
+    vector<bool> enc1 = toVec2(context, encrypted1);
+    vector<bool> enc2 = toVec2(context, encrypted2);
+    cout << "Bits: " << enc1.size() << "\n";
+    cout << "Bytes: " << enc1.size() / 8 << "\n";
+    cout << "uint64: " << enc1.size() / 64 << "\n";
+    cout << "Comparing...\n";
+    cout << compare(enc1, enc2) << "\n";
+    // compare2(evaluator, encrypted1, encrypted2);
 
     // for (int i = 0; i <1; ++i) {
     //     evaluator.multiply_inplace(encrypted1, encrypted2);
     // }
 
-    for (size_t i = 0; i < encrypted1.size(); i++) {
-        cout << " " << encrypted1[i] << " ";
-    }
+    // for (size_t i = 0; i < encrypted1.poly_modulus_degree(); i++) {
+    //     cout << " " << encrypted1[i] << " ";
+    // }
 
-    cout << "\n";
-    for (size_t i = 0; i < encrypted2.size(); i++) {
-        cout << " " << encrypted2[i] << " ";
-    }
+    // cout << "\n";
+    // for (size_t i = 0; i < encrypted2.poly_modulus_degree(); i++) {
+    //     cout << " " << encrypted2[i] << " ";
+    // }
 
     cout << "\n";
 

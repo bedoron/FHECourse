@@ -132,6 +132,7 @@ int compare(vector<bool> enc1, vector<bool> enc2) {
 
 int main()
 {
+    cout << "HELLLLLLOOOOOO" << endl;
     EncryptionParameters parms(scheme_type::BFV);
     parms.set_poly_modulus_degree(1 << 8);
     parms.set_coeff_modulus(coeff_modulus_128(2048));

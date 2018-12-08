@@ -56,6 +56,40 @@ CMAKE_BINARY_DIR = /Users/dbenelaz/pws/FHECourse
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/local/Cellar/cmake/3.12.1/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/local/Cellar/cmake/3.12.1/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/local/Cellar/cmake/3.12.1/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/local/Cellar/cmake/3.12.1/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
+
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
+
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -77,6 +111,18 @@ package_source:
 package_source/fast: package_source
 
 .PHONY : package_source/fast
+
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/local/Cellar/cmake/3.12.1/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/local/Cellar/cmake/3.12.1/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
 
 # Special rule for the target test
 test:
@@ -508,6 +554,19 @@ Experimental/fast:
 .PHONY : Experimental/fast
 
 #=============================================================================
+# Target rules for targets named seal
+
+# Build rule for target.
+seal: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 seal
+.PHONY : seal
+
+# fast build rule for target.
+seal/fast:
+	$(MAKE) -f SEAL/CMakeFiles/seal.dir/build.make SEAL/CMakeFiles/seal.dir/build
+.PHONY : seal/fast
+
+#=============================================================================
 # Target rules for targets named fhecourse
 
 # Build rule for target.
@@ -526,6 +585,9 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... install/strip"
+	@echo "... install/local"
+	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... package_source"
 	@echo "... ContinuousCoverage"
@@ -537,6 +599,7 @@ help:
 	@echo "... ExperimentalSubmit"
 	@echo "... ContinuousUpdate"
 	@echo "... ExperimentalUpdate"
+	@echo "... install"
 	@echo "... ExperimentalStart"
 	@echo "... ContinuousSubmit"
 	@echo "... ExperimentalTest"
@@ -559,6 +622,7 @@ help:
 	@echo "... ExperimentalMemCheck"
 	@echo "... Continuous"
 	@echo "... Experimental"
+	@echo "... seal"
 	@echo "... fhecourse"
 .PHONY : help
 

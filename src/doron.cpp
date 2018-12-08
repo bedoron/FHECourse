@@ -132,14 +132,13 @@ int compare(vector<bool> enc1, vector<bool> enc2) {
 
 int main()
 {
-    cout << "HELLLLLLOOOOOO" << endl;
     EncryptionParameters parms(scheme_type::BFV);
     parms.set_poly_modulus_degree(1 << 8);
     parms.set_coeff_modulus(coeff_modulus_128(2048));
     parms.set_plain_modulus(1 << 8);
     auto context = SEALContext::Create(parms);
 
-    IntegerEncoder encoder(parms.plain_modulus());
+    IntegerEncoder encoder( parms.plain_modulus());
     KeyGenerator keygen(context);
     PublicKey public_key = keygen.public_key();
     SecretKey secret_key = keygen.secret_key();

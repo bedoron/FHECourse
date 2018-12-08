@@ -4,6 +4,25 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Cmake SEAL Debug",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-DCMAKE_BUILD_TYPE=debug"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/SEAL"
+            }
+        },
+        {
+            "label": "Make seal",
+            "type": "shell",
+            "command": "make",
+            "options": {
+                "cwd": "${workspaceFolder}/SEAL"
+            }
+        },
+        {
             "label": "Build project",
             "type": "shell",
             "command": "make",

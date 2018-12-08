@@ -4,6 +4,7 @@ project(FHECourse VERSION 0.1.0)
 include(CTest)
 enable_testing()
 set(CMAKE_BUILD_TYPE Debug)
+add_subdirectory(SEAL)
 add_subdirectory(src)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

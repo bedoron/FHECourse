@@ -1,25 +1,28 @@
-FROM alpine:latest
-
 FROM ubuntu:18.04
 MAINTAINER Doron <b.e.doron@gmail.com>
 
 # Install binary dependencies
 RUN apt-get -qqy update && apt-get install -qqy \
-	g++ \
+	clang \
 	git \
 	make \
     cmake \
     build-essential \
     libgflags-dev \
+    libgsl-dev \
+    ca-certificates \
 	--no-install-recommends
 
-RUN mkdir -p SEAL/
-COPY /SEAL/ /SEAL/
-WORKDIR /SEAL/
+RUN mkdir -p /opt/
+WORKDIR /opt/
+RUN git clone https://github.com/Microsoft/SEAL.git
+WORKDIR /opt/SEAL/src
+RUN cmake -DCMAKE_BUILD_TYPE=Debug . && make install
 
-RUN rm -rf cmake; \
-    rm -rf CMakeFiles; \
-    rm -rf CMakeCache*; \
-    ls -al;
+RUN mkdir -p /app/src
+COPY CMakeLists.txt /app
+COPY ./src /app/src
+WORKDIR /app
+RUN find . -iwholename '*cmake*' -not -name CMakeLists.txt -delete && cmake -DCMAKE_BUILD_TYPE=Debug . && make
 
-
+CMD /app/bin/fhecourse

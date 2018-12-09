@@ -18,5 +18,6 @@
         "iterator": "cpp",
         "string": "cpp",
         "string_view": "cpp"
-    }
+    },
+    "C_Cpp.configurationWarnings": "Disabled"
 }

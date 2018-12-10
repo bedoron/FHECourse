@@ -12,6 +12,7 @@
 #include <iterator>
 #include <vector>
 #include "seal/seal.h"
+#include "exevaluator.h"
 
 using namespace std;
 using namespace seal;
@@ -145,6 +146,7 @@ int main()
 
     Encryptor encryptor(context, public_key);
     Evaluator evaluator(context);
+    ExEvaluator exevaluator(context, encoder);
 
     Decryptor decryptor(context, secret_key);
 
@@ -153,7 +155,7 @@ int main()
     cout << "Encoded " << value_one << " as polynomial " << plain_one.to_string() 
         << " (plain_one)" << endl;
 
-    int value1 = 0;
+    int value1 = 5;
     Plaintext plain1 = encoder.encode(value1);
     cout << "Encoded " << value1 << " as polynomial " << plain1.to_string() 
         << " (plain1)" << endl;
@@ -179,34 +181,7 @@ int main()
     encryptor.encrypt(plain_one, encrypted_one);
     cout << "Done (encrypted_one)" << endl;
 
-    // evaluator.multiply_inplace(encrypted1, encrypted_one);
-
-    // evaluator.add_inplace(encrypted1, encrypted_one);
-    // evaluator.sub_inplace(encrypted1, encrypted_one);
-
-    cout << "Converting to bitarray\n";
-    vector<bool> enc1 = toVec2(context, encrypted1);
-    vector<bool> enc2 = toVec2(context, encrypted2);
-    cout << "Bits: " << enc1.size() << "\n";
-    cout << "Bytes: " << enc1.size() / 8 << "\n";
-    cout << "uint64: " << enc1.size() / 64 << "\n";
-    cout << "Comparing...\n";
-    cout << compare(enc1, enc2) << "\n";
-    // compare2(evaluator, encrypted1, encrypted2);
-
-    // for (int i = 0; i <1; ++i) {
-    //     evaluator.multiply_inplace(encrypted1, encrypted2);
-    // }
-
-    // for (size_t i = 0; i < encrypted1.poly_modulus_degree(); i++) {
-    //     cout << " " << encrypted1[i] << " ";
-    // }
-
-    // cout << "\n";
-    // for (size_t i = 0; i < encrypted2.poly_modulus_degree(); i++) {
-    //     cout << " " << encrypted2[i] << " ";
-    // }
-
+    exevaluator.xor_trick_inplace(encrypted1, encrypted2);
     cout << "\n";
 
     /* Decrypt part */
@@ -216,6 +191,6 @@ int main()
     cout << "Done" << endl;
 
     cout << "Plaintext polynomial: " << plain_result.to_string() << endl;
-    cout << "Decoded integer: " << encoder.decode_int32(plain_result) << endl;
+    cout << "Decoded integer: " << encoder.decode_biguint(plain_result).to_string() << endl;
 }
 

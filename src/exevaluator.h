@@ -3,7 +3,7 @@
 using namespace seal;
 class ExEvaluator: public Evaluator {
     public:
-    ExEvaluator(const std::shared_ptr<SEALContext> &context) = delete;
+    ExEvaluator(const std::shared_ptr<SEALContext> &context, const IntegerEncoder &encoder);
 
     void xor_op_inplace(Ciphertext &encrypted1, const Ciphertext &encrypted2);
 
@@ -12,9 +12,20 @@ class ExEvaluator: public Evaluator {
         destination = encrypted1;
         xor_op_inplace(destination, encrypted2);
     }
+
+
+    void xor_trick_inplace(Ciphertext &encrypted1, const Ciphertext &encrypted2);
+    
+    inline void xor_trick(const Ciphertext &encrypted1, const Ciphertext &encrypted2,
+                Ciphertext &destination) {
+        destination = encrypted1;
+        xor_trick_inplace(destination, encrypted2);
+    }
+
     private:
 
     std::shared_ptr<SEALContext> context_{ nullptr };
+    IntegerEncoder encoder_;
 
 
     inline void xor_poly_poly_coeffmod(const std::uint64_t *operand1, 

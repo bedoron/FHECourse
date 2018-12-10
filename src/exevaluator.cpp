@@ -15,9 +15,10 @@
 
 using namespace std;
 using namespace seal::util;
+using namespace seal;
 
-ExEvaluator::ExEvaluator(const std::shared_ptr<SEALContext> &context) : 
-        context_(context), Evaluator(context) {
+ExEvaluator::ExEvaluator(const std::shared_ptr<SEALContext> &context, const IntegerEncoder &encoder) : 
+        context_(context), encoder_(encoder), Evaluator(context) {
     
 }
 
@@ -62,4 +63,13 @@ void ExEvaluator::xor_op_inplace(Ciphertext &encrypted1, const Ciphertext &encry
             coeff_count * (encrypted2_size - encrypted1_size),
             coeff_mod_count, encrypted1.data(encrypted1_size));
     }
+}
+
+void ExEvaluator::xor_trick_inplace(Ciphertext &encrypted1, const Ciphertext &encrypted2) {
+    this->multiply_inplace(encrypted1, encrypted2);
+    
+    Plaintext one = encoder_.encode(1);
+    this->sub_plain_inplace(encrypted1, one);
+    
+    this->negate_inplace(encrypted1);
 }

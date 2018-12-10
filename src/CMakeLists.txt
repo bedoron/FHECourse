@@ -5,7 +5,7 @@ project(FHECourse VERSION 0.0.1 LANGUAGES CXX)
 # Executable will be in ../bin
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
-add_executable(fhecourse doron.cpp)
+add_executable(fhecourse doron.cpp exevaluator.cpp)
 
 # Import SEAL
 find_package(SEAL REQUIRED)

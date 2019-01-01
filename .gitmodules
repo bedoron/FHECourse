@@ -1,2 +1,4 @@
 [submodule "HElib"]
-    url = https://github.com/shaih/HElib.git
+	path = HElib
+	url = https://github.com/shaih/HElib.git
+	branch = master

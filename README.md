@@ -1,10 +1,14 @@
 
-Build it:
-docker build . -t fhecourse
+Build docker image:
+`make image`
 
-Log into it:
-docker run -it fhecourse /bin/bash
+Start docker image in the background:
+`make start`
+This will start the image with src mounted into the container.
 
-Just run it:
-docker run -t fhecourse
+Log into it to look around:
+`make bash`
+This will put you where the actual makefile is, hit make to rebuild (remember that src folder is mounted)
+
+
 

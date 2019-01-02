@@ -3,6 +3,7 @@ RUN apt-get -y update && apt-get -y install \
     build-essential \
     git \
     cmake \
+    gdb \
     libntl-dev
 
 RUN mkdir -p /opt/build/src 
@@ -20,6 +21,6 @@ RUN rm -rf /opt/build/HElib/_build
 WORKDIR /opt/build/src
 COPY src .
 WORKDIR /opt/build/
-RUN cmake ./src && make
+RUN cmake ./src && make && rm -rf src/
 
-CMD "/opt/build/fhecourse"
+CMD /opt/build/fhecourse && sleep infinity

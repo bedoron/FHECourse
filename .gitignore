@@ -33,6 +33,7 @@
 
 bin/
 build/
+_build/
 
 CMakeCache.txt
 CMakeFiles

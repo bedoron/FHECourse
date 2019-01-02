@@ -7,9 +7,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/bin)
 
 add_executable(fhecourse doron.cpp)
 
-# Import SEAL
-find_package(fhe REQUIRED)
+# Import HELib
+#target_link_libraries(doron.cpp ${CMAKE_SOURCE_DIR}/HELib/lib/libfhe.a)
 
-# Link SEAL
-target_link_libraries(fhecourse fhe)
+# ADD_LIBRARY(fhe STATIC IMPORTED)
+# SET_TARGET_PROPERTIES(fhe PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/HELib/lib/libfhe.a)
+#TARGET_LINK_LIBRARIES(fhecourse fhe)
+
 

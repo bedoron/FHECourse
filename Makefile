@@ -11,7 +11,7 @@ image: ## Build the image
 	docker build . -t fhecourse
 
 start: ## Start the image (container)
-	docker run -v $(PWD)/src:/opt/build/src -idt fhecourse
+	docker run -v $(PWD)src:/opt/build/src -idt fhecourse
 
 stop: ## Stop the container
 	docker stop $(CONTAINER_ID)

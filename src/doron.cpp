@@ -373,3 +373,36 @@ int main(int argc, char **argv)
 // another call to get an example where phi(m) is very
 // close to m:
 // Test_General_x m=18631 L=10 R=5
+
+
+void tryToCompare() {
+  bool dry=false;
+
+  long R=1; // number of rounds
+  long p=2; // plaintext base
+  long r=1; // lifting
+  long d=1; // degree of the field extension "d == 0 => factors[0] defines extension"
+  long c=2; // number of columns in the key-switching matrices
+  long k=80; // security parameter
+  long L=4; // # of levels in the modulus chain
+  long s=0; // minimum number of slots
+
+  long repeat=1; // number of times to repeat the test
+  long chosen_m=0; // use specified value as modulus
+  
+  Vec<long> mvec; // use product of the integers as  modulus - e.g., mvec='[5 3 187]' (this overwrite the m argument)
+  Vec<long> gens; // use specified vector of generators - e.g., gens='[562 1871 751]'
+
+  Vec<long> ords; // use specified vector of orders - e.g., ords='[4 2 -4]', negative means 'bad'
+
+  long seed=0; // PRG seed
+
+  long nt=1; // num threads
+
+  long w = 64;
+  SetSeed(ZZ(seed));
+  SetNumThreads(nt);
+  setDryRun(dry);
+
+  long m = FindM(k, L, c, p, d, s, chosen_m, !noPrint);
+}

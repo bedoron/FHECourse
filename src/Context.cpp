@@ -26,3 +26,15 @@ CtxtExt Context::encrypt(const vector<long>& v) {
     ea.encrypt(res, pubKey, tmp);
     return res;
 }
+
+vector<long> Context::decrypt(const CtxtExt& vec, unsigned int length) {
+    EncryptedArray ea(secKey.getContext());
+    vector<long> res(ea.size());
+    ea.decrypt(vec, secKey, res);
+
+    if (length != 0) {
+        res.resize(length);
+    }
+
+    return res;
+}

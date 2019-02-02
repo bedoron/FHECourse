@@ -14,4 +14,5 @@ public:
     Context(FHEcontext *context, FHESecKey *secKey);
 
     CtxtExt encrypt(const vector<long>& v);
+    vector<long> decrypt(const CtxtExt& vec, unsigned int length=0);
 };

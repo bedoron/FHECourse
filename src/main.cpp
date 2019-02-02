@@ -39,12 +39,22 @@ int main(int argc, char *argv[]) {
 
     cout << "Encrypting vector..." << endl;
     CtxtExt res = contex.encrypt(v);
-    cout << "NonZero check." << endl;
-    cout << "Is non zero: " << res.isNonZero() << endl;
+    cout << "Decrypting cyphertext (sanity check)..." << endl;
+    vector<long> decryptedRes = contex.decrypt(res, up.size);
+    cout << "Decrypted value is:" << endl;
+    printVector(decryptedRes);
+
+    // cout << "NonZero check." << endl; 
+    // cout << "Is non zero: " << res.isNonZero() << endl; // <-- Segfault
     
     cout << "Creating negated version of cyphertext..." << endl;
     CtxtExt negatedRes(res);
     negatedRes.negate();
+
+    cout << "Decrypting negated version  of cyphertext..." << endl;
+    vector<long> decryptedNegatedRes = contex.decrypt(negatedRes, up.size);
+    cout << "Decrypted value is:" << endl;
+    printVector(decryptedNegatedRes);
 
     cout << "Trying to create an artificaial zero..." << endl;
     res.addCtxt(negatedRes, true);

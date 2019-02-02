@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
     vector<long> isNonZeroDecrypted = contex.decrypt(isNonZero);
     printVector(isNonZeroDecrypted);
 
-    cout << "Is non zero: " << res.isNonZero() << endl; // <-- Segfault
+    // cout << "Is non zero: " << res.isNonZero() << endl; // <-- Segfault
     
     cout << "Creating negated version of cyphertext..." << endl;
     CtxtExt negatedRes(res);

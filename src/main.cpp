@@ -13,6 +13,12 @@
 #include "UserParams.h"
 #include "ContextBuilder.h"
 #include "utils.h"
+#include <algorithm>
+#include <functional>
+
+using std::transform;
+using std::plus;
+using std::function;
 
 int main(int argc, char *argv[]) {
     UserParams up;
@@ -20,12 +26,15 @@ int main(int argc, char *argv[]) {
     
     cout << "Bulding context and generating keys..." << endl;
     Context contex = ContextBuilder::build(up);
-    cout << "Computations are modulo " << contex.modulo << endl;
+    cout << "Computations are modulo: " << contex.modulo << endl;
 
-    cout << "Generate random vector" << endl;
+    cout << "Generating random vector..." << endl;
     vector<long> v = randomVector(up.size, 0, 0, (unsigned int) contex.modulo/4);
     printVector(v);
 
+    cout << "Normalizing generated vector..." << endl;
+    transform(v.begin(), v.end(), v.begin(), createNormalizer(contex.modulo/8, contex.modulo));
+    printVector(v);
 
 //     long p = up.p, r = up.r, security = up.k, l;
 //     short strategy;

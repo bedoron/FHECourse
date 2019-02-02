@@ -22,3 +22,25 @@ void printVector(vector<long> v) {
     }
     cout << endl;
 }
+
+function<long(long)> createNormalizer(const long modulo, const long decrement) {
+    return [modulo, decrement](long fv) {
+        while((fv - decrement) > (modulo/2)) { 
+            fv -= modulo; 
+        } 
+        return fv;
+    };
+}
+
+
+/*
+
+[p](long num) { return adjustNumber(num - (p/8), p); }
+
+long adjustNumber(long n, long p) {
+    while (n > (p/2)) n -= p;
+    return n;
+}
+
+*/
+

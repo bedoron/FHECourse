@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
 
     cout << "Encrypting vector..." << endl;
     CtxtExt res = contex.encrypt(v);
-
+    cout << "NonZero check." << endl;
     cout << "Is non zero: " << res.isNonZero() << endl;
     
     cout << "Creating negated version of cyphertext..." << endl;

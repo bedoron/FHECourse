@@ -44,8 +44,12 @@ int main(int argc, char *argv[]) {
     cout << "Decrypted value is:" << endl;
     printVector(decryptedRes);
 
-    // cout << "NonZero check." << endl; 
-    // cout << "Is non zero: " << res.isNonZero() << endl; // <-- Segfault
+    cout << "NonZero check." << endl; 
+    CtxtExt &isNonZero = res.isNonZero();
+    vector<long> isNonZeroDecrypted = contex.decrypt(isNonZero);
+    printVector(isNonZeroDecrypted);
+
+    cout << "Is non zero: " << res.isNonZero() << endl; // <-- Segfault
     
     cout << "Creating negated version of cyphertext..." << endl;
     CtxtExt negatedRes(res);
@@ -59,7 +63,7 @@ int main(int argc, char *argv[]) {
     cout << "Trying to create an artificaial zero..." << endl;
     res.addCtxt(negatedRes, true);
 
-    cout << "Is non zero: " << res.isNonZero() << endl;
+    // cout << "Is non zero: " << res.isNonZero() << endl;
 
     // TODO: Now implement less than etc...
 

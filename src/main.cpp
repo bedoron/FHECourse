@@ -61,12 +61,15 @@ int main(int argc, char *argv[]) {
     printVector(decryptedNegatedRes);
 
     cout << "Trying to create an artificaial zero..." << endl;
-    res.addCtxt(negatedRes, true);
+    res.addCtxt(negatedRes, false);
 
     CtxtExt &allegedlyIsZeroEncrypted = res.isNonZero();
     vector<long> allegedlyIsZeroDecrypted = contex.decrypt(allegedlyIsZeroEncrypted);
     printVector(allegedlyIsZeroDecrypted);
 
+    cout << "Decrypted res is: " << endl;
+    vector<long> resShouldBeZero = contex.decrypt(res);
+    printVector(resShouldBeZero);
     // cout << "Is non zero: " << res.isNonZero() << endl;
 
     // TODO: Now implement less than etc...

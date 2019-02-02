@@ -7,6 +7,6 @@ public:
  * Return 1 for non zeros, otherwise, 0 (number was )
  * */
     using Ctxt::Ctxt;
-    
-    CtxtExt isNonZero();
+
+    CtxtExt& isNonZero();
 };

@@ -4,7 +4,7 @@
 using std::cout;
 using std::endl;
 
-CtxtExt CtxtExt::isNonZero() {
+CtxtExt& CtxtExt::isNonZero() {
     if (this->effectiveR() != 1) {
         throw "Unsupported R parameter, please use 1.";
     }
@@ -20,7 +20,7 @@ CtxtExt CtxtExt::isNonZero() {
 
         if (result == NULL) {
             cout << i << " - Initializing" << endl;
-            result = &tmp;
+            result = new CtxtExt(tmp);
             continue;
         }
 
@@ -30,5 +30,6 @@ CtxtExt CtxtExt::isNonZero() {
 
     cout << "Finished, power of " << p - 1 << endl;
     result->power(p - 1);
+    cout << "Finished..." << endl;
     return *result;
 }

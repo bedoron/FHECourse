@@ -1,9 +1,11 @@
+#pragma once
 #include "FHE.h"
 #include "UserParams.h"
 
 typedef struct {
-    FHESecKey* secKey;
-    FHEcontext* context;
+    const FHESecKey* secKey;
+    const FHEcontext* context;
+    const long modulo;
 } Context;
 
 class ContextBuilder {

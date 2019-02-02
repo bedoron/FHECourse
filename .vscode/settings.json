@@ -17,7 +17,8 @@
         "array": "cpp",
         "iterator": "cpp",
         "string": "cpp",
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "sstream": "cpp"
     },
     "C_Cpp.configurationWarnings": "Disabled"
 }

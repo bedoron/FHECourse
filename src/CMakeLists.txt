@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 project(FHECourse VERSION 0.0.1 LANGUAGES CXX)
-add_executable(fhecourse doron.cpp)
+add_executable(fhecourse main.cpp CtxtExt.cpp ContextBuilder.cpp UserParams.cpp utils.cpp)
 
 # Import HELib
 find_library(helib_location NAMES libfhe.a)

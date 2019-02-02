@@ -1,3 +1,4 @@
+#pragma once
 #include <vector>
 #include "NumbTh.h"
 
@@ -28,6 +29,7 @@ public:
     long seed=0;
     long nt=1;
     bool noPrint;
+    long size=DEFAULT_SIZE;
 
     UserParams();
     void parse(int argc, char** argv);

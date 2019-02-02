@@ -15,21 +15,16 @@ CtxtExt& CtxtExt::isNonZero() {
     for (long i = p/2; i > 0; i--) {
         cout << i << endl;
         CtxtExt tmp(*this);
-        cout << i << " - Adding" << endl;
         tmp.addConstant(ZZ(i));
 
         if (result == NULL) {
-            cout << i << " - Initializing" << endl;
             result = new CtxtExt(tmp);
             continue;
         }
 
-        cout << i << " - Multiplying" << endl;
         result->multiplyBy(tmp);
     }
 
-    cout << "Finished, power of " << p - 1 << endl;
     result->power(p - 1);
-    cout << "Finished..." << endl;
     return *result;
 }

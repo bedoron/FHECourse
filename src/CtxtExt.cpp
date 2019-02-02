@@ -13,7 +13,6 @@ CtxtExt& CtxtExt::isNonZero() {
     
     CtxtExt *result = NULL;
     for (long i = p/2; i > 0; i--) {
-        cout << i << endl;
         CtxtExt tmp(*this);
         tmp.addConstant(ZZ(i));
 

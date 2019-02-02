@@ -23,14 +23,9 @@ Context ContextBuilder::build(const UserParams &up) {
     
     cout << "Generating secure key..." << endl;
     secKey->GenSecKey(w);
-    
+
     addSome1DMatrices(*secKey);
 
-    Context ctx = {
-        secKey,
-        context,
-        context->alMod.getPPowR()
-    };
-
-    return ctx;
+    Context ctx(context, secKey);
+    return ctx; // Copy Ctor ?!
 };

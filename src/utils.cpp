@@ -33,14 +33,3 @@ function<long(long)> createNormalizer(const long modulo, const long decrement) {
 }
 
 
-/*
-
-[p](long num) { return adjustNumber(num - (p/8), p); }
-
-long adjustNumber(long n, long p) {
-    while (n > (p/2)) n -= p;
-    return n;
-}
-
-*/
-

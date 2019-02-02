@@ -12,6 +12,7 @@
 #include "CtxtExt.h"
 #include "UserParams.h"
 #include "ContextBuilder.h"
+#include "Context.h"
 #include "utils.h"
 #include <algorithm>
 #include <functional>
@@ -35,6 +36,15 @@ int main(int argc, char *argv[]) {
     cout << "Normalizing generated vector..." << endl;
     transform(v.begin(), v.end(), v.begin(), createNormalizer(contex.modulo/8, contex.modulo));
     printVector(v);
+
+    cout << "Encrypting vector..." << endl;
+    CtxtExt res = contex.encrypt(v);
+
+    // TODO: Now implement less than etc...
+
+
+    // CtxtExt c = contex.context->
+
 
 //     long p = up.p, r = up.r, security = up.k, l;
 //     short strategy;

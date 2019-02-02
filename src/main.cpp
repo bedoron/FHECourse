@@ -40,6 +40,17 @@ int main(int argc, char *argv[]) {
     cout << "Encrypting vector..." << endl;
     CtxtExt res = contex.encrypt(v);
 
+    cout << "Is non zero: " << res.isNonZero() << endl;
+    
+    cout << "Creating negated version of cyphertext..." << endl;
+    CtxtExt negatedRes(res);
+    negatedRes.negate();
+
+    cout << "Trying to create an artificaial zero..." << endl;
+    res.addCtxt(negatedRes, true);
+
+    cout << "Is non zero: " << res.isNonZero() << endl;
+
     // TODO: Now implement less than etc...
 
 

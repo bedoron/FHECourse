@@ -44,7 +44,8 @@ cmake_install.cmake
 install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
-
+fhecourse
+src/fhecourse
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json

@@ -12,7 +12,7 @@ image: ## Build the image
 	docker build . -t fhecourse
 
 start: ## Start the image (container)
-	docker run -v $(CWD)/src:/opt/build/src -idt fhecourse
+	docker run -v $(CWD)/src:/opt/build/src  --privileged -idt fhecourse
 
 stop: ## Stop the container
 	docker stop $(CONTAINER_ID)
@@ -21,4 +21,4 @@ bash: ## Login to the container
 	@docker exec -it $(CONTAINER_ID) bash
 
 run: ## Compile and run
-	@docker exec -it $(CONTAINER_ID) bash -c "cmake ./src && make && ./fhecourse"
+	@docker exec -it $(CONTAINER_ID) --privileged bash -c "cmake ./src && make && ./fhecourse"
